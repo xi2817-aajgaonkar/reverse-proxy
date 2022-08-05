@@ -30,7 +30,13 @@ func NewProxy(targetHost string) (*httputil.ReverseProxy, error) {
 	originalDirector := proxy.Director
 	proxy.Director = func(req *http.Request) {
 		originalDirector(req)
-		req.Header.Set("X-WEBAUTH-USER", "admin")
+		// read username from request body &
+		// authenticate the user by verifying in database or any other way
+		// pass the role of the user
+		// "admin" role will have all privileges
+		// rest roles will have access as per authorization policy
+		user := "admin"
+		req.Header.Set("X-WEBAUTH-USER", user)
 	}
 	return proxy, nil
 }
